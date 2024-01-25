@@ -1,0 +1,70 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE User (
+	UserID	INTEGER NOT NULL PRIMARY KEY,
+	Username	VARCHAR (50),
+	Verified	VARCHAR (10),
+	Followers	INTEGER
+);
+
+CREATE TABLE Tweet (
+	TweetID	INTEGER NOT NULL PRIMARY KEY,
+	UserID	INTEGER NOT NULL,
+	Content	VARCHAR (200),
+	FOREIGN KEY (UserID)
+        REFERENCES User(UserID)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Likes (
+	LikeID	INTEGER NOT NULL PRIMARY KEY,
+	UserID	INTEGER NOT NULL,
+	TweetID	INTEGER,
+	CommentID	INTEGER,
+	FOREIGN KEY (CommentID)
+        REFERENCES Comments(CommentID)
+        ON DELETE CASCADE,
+	FOREIGN KEY (TweetID)
+        REFERENCES Tweet(TweetID)
+        ON DELETE CASCADE,
+	FOREIGN KEY (UserID)
+        REFERENCES User(UserID)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE HashtagsInContent (
+	HashtagID	INTEGER NOT NULL,
+	TweetID	INTEGER,
+	CommentID	INTEGER,
+	FOREIGN KEY (CommentID)
+        REFERENCES Comments(CommentID)
+        ON DELETE CASCADE,
+	FOREIGN KEY (HashtagID)
+        REFERENCES Hashtag(HashtagID)
+        ON DELETE CASCADE,
+	FOREIGN KEY (TweetID)
+        REFERENCES Tweet(TweetID)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Hashtag (
+	HashtagID	INTEGER NOT NULL PRIMARY KEY,
+	Content	VARCHAR (50)
+);
+
+CREATE TABLE Comments (
+	CommentID	INTEGER NOT NULL PRIMARY KEY,
+	UserID	INTEGER NOT NULL,
+	TweetID	INT,
+	FK_CommentID INT,
+	Content	VARCHAR (200),
+    FOREIGN KEY (UserID)
+        REFERENCES User(UserID)
+        ON DELETE CASCADE,
+	FOREIGN KEY (TweetID)
+        REFERENCES Tweet(TweetID)
+        ON DELETE CASCADE,
+	FOREIGN KEY (FK_CommentID)
+        REFERENCES Comments(FK_CommentID)
+        ON DELETE CASCADE
+);
